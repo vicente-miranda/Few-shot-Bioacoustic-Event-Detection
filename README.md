@@ -1,6 +1,6 @@
 # Few-shot Bioacoustic Event Detection (ProtoNet + ResNet)
 
-This repo contains a cleaned, reproducible pipeline for the DCASE Few-shot Bioacoustic Event Detection task. The system uses a prototypical network with a ResNet encoder, PCEN-based features, and episodic training. Evaluation supports adaptive segment length, negative sampling from gaps between the 5 shots, optional transductive refinement, and threshold sweeps.
+Code for the DCASE Few-shot Bioacoustic Event Detection task. The pipeline combines PCEN audio features, episodic prototypical-network training with a ResNet encoder, and evaluation with adaptive segments, negative prototypes, optional transductive refinement, and threshold sweeps. The task audio and generated feature caches are not included.
 
 ## Pipeline Overview
 
@@ -8,6 +8,21 @@ This repo contains a cleaned, reproducible pipeline for the DCASE Few-shot Bioac
 2) **Training**: episodic ProtoNet training using a ResNet encoder.  
 3) **Evaluation**: adaptive segment length per file, negative prototypes from gaps between the first 5 shots, and optional transductive refinement.  
 4) **Post-processing**: optional short-event filtering and gap merging.  
+
+## Install and Configure
+
+From the repository root, create an environment and install the listed dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Before running a stage, configure `path.root_dir`, `path.train_dir`, and `path.eval_dir` in `config.yaml` for your checkout and task data. The committed defaults point to directories on the original workstation and are left unchanged; set them locally or override them with Hydra command-line options. Keep machine-specific paths out of commits. Feature caches, model files, and run outputs are placed beneath `root_dir` by default.
+
+The training and validation audio, annotations, and feature caches must be prepared separately; they are not stored in this repository.
 
 ## Quickstart
 
@@ -159,7 +174,7 @@ Key config fields in `config.yaml`:
 
 Only the **ResNet encoder** is supported in this cleaned version.
 
-## Repo Layout
+## Repository Layout
 
 ```
 fsbio/                feature extraction, model, sampler, metrics
